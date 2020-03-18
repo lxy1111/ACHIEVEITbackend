@@ -2,11 +2,13 @@ package com.apriltechnology.achieveit.service.impl;
 
 import com.apriltechnology.achieveit.dto.ProjectInfoSearch;
 import com.apriltechnology.achieveit.entity.ProjectInfo;
+import com.apriltechnology.achieveit.exception.BatchDeleteException;
 import com.apriltechnology.achieveit.mapper.ProjectInfoMapper;
 import com.apriltechnology.achieveit.service.ProjectInfoService;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,12 +47,29 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public Pair<Boolean,String> editProjectInfo(ProjectInfoSearch projectInfoSearch) {
 
-        Integer result = projectInfoMapper.updateProjectInfo(projectInfoSearch);
-        if(null == result || result <= 0){
+        int result = projectInfoMapper.updateProjectInfo(projectInfoSearch);
+        if(result <= 0){
             return new Pair<>(false,"更新失败！");
         }else{
             return new Pair<>(true,"更新成功！");
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Pair<Boolean, String> deleteProjectInfo(List<Long> projectIds) throws BatchDeleteException{
+
+        if(null != projectIds && projectIds.size() > 0){
+            int size = projectIds.size();
+            int result = projectInfoMapper.deleteProjectInfo(projectIds);
+            if(result == size){
+                return new Pair<>(true,"删除成功！");
+            }else{
+                throw new BatchDeleteException("删除失败！");
+            }
+        }
+
+        return new Pair<>(false,"请选择需要删除的项目！");
     }
 
 

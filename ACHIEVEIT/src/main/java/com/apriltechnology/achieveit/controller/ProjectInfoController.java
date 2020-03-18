@@ -3,14 +3,18 @@ package com.apriltechnology.achieveit.controller;
 import com.apriltechnology.achieveit.dto.ProjectInfoSearch;
 import com.apriltechnology.achieveit.dto.Response;
 import com.apriltechnology.achieveit.entity.ProjectInfo;
+import com.apriltechnology.achieveit.exception.BatchDeleteException;
 import com.apriltechnology.achieveit.service.ProjectInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javafx.util.Pair;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -25,6 +29,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/ProjectInfo")
 @Api(tags = "项目信息接口")
+@Slf4j
 public class ProjectInfoController {
 
     @Autowired
@@ -76,5 +81,31 @@ public class ProjectInfoController {
         }
     }
 
+    @RequestMapping("/Delete")
+    @ResponseBody
+    @ApiOperation("删除项目信息")
+    Response deleteProjectInfo(@RequestParam("ids[]") List<Long> ids){
+
+        Response response = new Response();
+
+        try {
+            Pair<Boolean,String> result = projectInfoService.deleteProjectInfo(ids);
+            if(result.getKey()){
+                response.setCode("0");
+                response.setMsg(result.getValue());
+                return response;
+            }else{
+                response.setCode("1");
+                response.setMsg(result.getValue());
+                return response;
+            }
+        } catch (BatchDeleteException e) {
+            log.error("deleteProjectInfo", ExceptionUtils.getStackTrace(e));
+            response.setCode("1");
+            response.setMsg(e.getMessage());
+            return response;
+        }
+
+    }
 
 }

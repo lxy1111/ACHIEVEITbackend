@@ -36,6 +36,13 @@ public interface ProjectInfoMapper {
      * @param projectInfoSearch
      * @return
      */
-    Integer updateProjectInfo(ProjectInfoSearch projectInfoSearch);
+    int updateProjectInfo(ProjectInfoSearch projectInfoSearch);
+
+    /**
+     * 删除项目
+     * @param ids
+     * @return
+     */
+    int deleteProjectInfo(List<Long> ids);
 
 }

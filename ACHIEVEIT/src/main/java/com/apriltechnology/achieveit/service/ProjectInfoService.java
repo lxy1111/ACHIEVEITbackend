@@ -2,6 +2,7 @@ package com.apriltechnology.achieveit.service;
 
 import com.apriltechnology.achieveit.dto.ProjectInfoSearch;
 import com.apriltechnology.achieveit.entity.ProjectInfo;
+import com.apriltechnology.achieveit.exception.BatchDeleteException;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -34,4 +35,11 @@ public interface ProjectInfoService {
      */
     Pair<Boolean,String> editProjectInfo(ProjectInfoSearch projectInfoSearch);
 
+
+    /**
+     * 批量删除项目
+     * @param projectIds
+     * @return
+     */
+    Pair<Boolean,String> deleteProjectInfo(List<Long> projectIds) throws BatchDeleteException;
 }
