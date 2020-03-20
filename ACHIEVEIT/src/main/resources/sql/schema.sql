@@ -52,6 +52,44 @@ create table projectInfo(
    INDEX project_name_index(project_name)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='项目信息表';
 
+
+create table projectFunc(
+   id bigint NOT NULL AUTO_INCREMENT COMMENT '功能id',
+   project_id bigint NOT NULL DEFAULT '0' COMMENT '项目id',
+   function_name varchar(150) NOT NULL DEFAULT '' COMMENT '功能名称',
+   person_charge varchar(100) NOT NULL  DEFAULT '' COMMENT '负责人',
+   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   change_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更改时间',
+   PRIMARY KEY (id),
+   foreign key (project_id) references projectInfo(id) on delete cascade on update cascade
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='项目功能表';
+
+create table projectSubFunc(
+   id bigint NOT NULL AUTO_INCREMENT COMMENT '子功能id',
+   func_id bigint NOT NULL DEFAULT '0' COMMENT '关联功能id',
+   function_name varchar(150) NOT NULL DEFAULT '' COMMENT '子功能名称',
+   person_charge varchar(100) NOT NULL  DEFAULT '' COMMENT '负责人',
+   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   change_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更改时间',
+   PRIMARY KEY (id),
+   foreign key (func_id) references projectFunc(id) on delete cascade on update cascade
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='项目子功能表';
+
+
+#插入项目功能信息
+insert into projectFunc(project_id,function_name,person_charge) values
+(1,'项目信息','fjm'),
+(1,'工时管理','fjm');
+
+#插入项目子功能信息
+insert into projectSubFunc(func_id,function_name,person_charge) values
+(1,'项目查询','fjm'),
+(1,'项目修改','br'),
+(1,'项目删除','lxy'),
+(2,'工时查询','fjm'),
+(2,'工时审核','br');
+
+
 #插入项目信息
 insert into projectInfo(creater_id,project_name,customer_info,leader,milepost,project_function,technology,business_area,status) values
 (1,'项目1','老师1','老板1','里程碑1','项目管理1','java1','互联网1',1),

@@ -7,6 +7,7 @@ import com.apriltechnology.achieveit.util.JWTUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javafx.util.Pair;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/Login")
 @Api(tags = "登录接口")
+@Slf4j
 public class LoginController {
 
     @Autowired
@@ -38,7 +40,8 @@ public class LoginController {
     public Response logOn(@Valid @RequestBody UserLoginInfo userLoginInfo, BindingResult results){
 
         if(results.hasErrors()){
-            return Response.createError("1",results.getFieldError().getDefaultMessage());
+            log.error("logOn bindingResult",results.getFieldError().getField());
+            return Response.createError("1",results.getFieldError().getField());
         }
 
         Response response = new Response();
