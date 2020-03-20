@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apriltechnology.achieveit.mapper.ProjectSubFunctionMapper">
+
+    <insert id="projectSubFunctionAdd" parameterType="com.apriltechnology.achieveit.dto.ProjectSubFunctionAdd">
+        insert into projectSubFunc (func_id,function_name,person_charge)
+        values (#{funcId},#{functionName},#{personCharge})
+    </insert>
+
+    <delete id="projectSubFunctionDelete" parameterType="Long">
+        DELETE FROM projectSubFunc
+        WHERE id = #{id}
+    </delete>
+
+    <update id="projectSubFunctionEdit" parameterType="com.apriltechnology.achieveit.dto.ProjectSubFunctionEdit">
+        update projectSubFunc
+        set function_name = #{functionName},
+             person_charge = #{personCharge}
+        where id = #{id}
+    </update>
+</mapper>
